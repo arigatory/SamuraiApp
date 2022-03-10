@@ -30,10 +30,19 @@ namespace SamuraiApp.UI
             //InsertNewSamuraiWithManyQuotes();
             //AddQuoteToExistingSamuraiWhileTracked();
             //AddQuoteToExistingSamuraiNotTracked(2);
-            Simpler_AddQuoteToExistingSamuraiNotTracked(2);
+            //Simpler_AddQuoteToExistingSamuraiNotTracked(2);
+            EagerLoadSamuraiWithQuotes();
         }
 
 
+
+
+
+        private static void EagerLoadSamuraiWithQuotes()
+        {
+            var samuraiWithQuotes = _context.Samurais.Include(s=>s.Quotes).ToList();
+            //var splitQuery = _context.Samurais.AsSplitQuery().Include(s => s.Quotes).ToList();
+        }
         private static void AddQuoteToExistingSamuraiNotTracked(int samuraiId)
         {
             var samurai = _context.Samurais.Find(samuraiId);
@@ -47,7 +56,6 @@ namespace SamuraiApp.UI
                 newContext.SaveChanges();
             }
         }
-
         private static void Simpler_AddQuoteToExistingSamuraiNotTracked(int samuraiId)
         {
             var quote = new Quote { Text = "Thanks for dinner!", SamuraiId = samuraiId };
@@ -55,7 +63,6 @@ namespace SamuraiApp.UI
             newContext.Quotes.Add(quote);
             newContext.SaveChanges();
         }
-
         private static void AddQuoteToExistingSamuraiWhileTracked()
         {
             var samurai = _context.Samurais.FirstOrDefault();
